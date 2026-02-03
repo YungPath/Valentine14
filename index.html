@@ -10,36 +10,22 @@ body {
   margin: 0;
   font-family: Arial, sans-serif;
   background: pink;
-  overflow: hidden;
   text-align: center;
+  overflow-x: hidden;
 }
 
 h1 {
-  font-size: 2.5em;
-  margin-top: 30px;
+  font-size: 2.4em;
+  margin-top: 25px;
 }
 
 p {
   font-size: 1.2em;
 }
 
-button {
-  padding: 15px 25px;
-  font-size: 18px;
-  border: none;
-  border-radius: 30px;
-  cursor: pointer;
-  margin: 15px;
-}
-
-#yes {
-  background: #ff3366;
-  color: white;
-}
-
-#no {
-  background: white;
-  position: absolute;
+.container {
+  position: relative;
+  padding-bottom: 150px;
 }
 
 img {
@@ -50,10 +36,36 @@ img {
   box-shadow: 0 10px 25px rgba(0,0,0,0.3);
 }
 
+.buttons {
+  margin-top: 25px;
+  position: relative;
+  height: 120px;
+}
+
+button {
+  padding: 15px 28px;
+  font-size: 18px;
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+}
+
+#yes {
+  background: #ff3366;
+  color: white;
+}
+
+#no {
+  background: white;
+  position: absolute;
+  left: 55%;
+  top: 50%;
+}
+
 .heart {
   position: fixed;
-  color: red;
   font-size: 20px;
+  color: red;
   animation: float 4s linear infinite;
 }
 
@@ -66,25 +78,27 @@ img {
 
 <body>
 
-<h1>Jessie 💕</h1>
-<p>Will you be my Valentine? 💘</p>
+<div class="container">
+  <h1>Jessie 💕</h1>
+  <p>Will you be my Valentine? 💘</p>
 
-<!-- 📸 Photo -->
-<img src="us.jpg" alt="Us together ❤️">
+  <!-- 📸 Picture -->
+  <img src="./us.jpg" alt="Us together ❤️">
 
-<br>
+  <!-- ❤️ Buttons -->
+  <div class="buttons">
+    <button id="yes" onclick="yesClick()">YES ❤️</button>
+    <button id="no" onmouseover="moveNo()">NO 😅</button>
+  </div>
+</div>
 
-<button id="yes" onclick="yesClick()">YES ❤️</button>
-<button id="no" onmouseover="moveNo()">NO 😅</button>
-
-<!-- 🎵 Background Music (plays after YES click) -->
+<!-- 🎵 Music -->
 <audio id="music" loop>
-  <source src="music.mp3" type="audio/mpeg">
+  <source src="./music.mp3" type="audio/mpeg">
 </audio>
 
 <script>
 function yesClick() {
-  // Play music (mobile-friendly)
   document.getElementById("music").play();
 
   document.body.innerHTML = `
@@ -97,14 +111,14 @@ function yesClick() {
 }
 
 function moveNo() {
-  const x = Math.random() * (window.innerWidth - 100);
-  const y = Math.random() * (window.innerHeight - 100);
   const noBtn = document.getElementById("no");
+  const x = Math.random() * (window.innerWidth - 120);
+  const y = Math.random() * (window.innerHeight - 120);
   noBtn.style.left = x + "px";
   noBtn.style.top = y + "px";
 }
 
-// 💕 Hearts animation
+// 💕 Floating hearts
 setInterval(() => {
   const heart = document.createElement("div");
   heart.className = "heart";
@@ -113,7 +127,7 @@ setInterval(() => {
   heart.style.top = "100%";
   document.body.appendChild(heart);
   setTimeout(() => heart.remove(), 4000);
-}, 300);
+}, 350);
 </script>
 
 </body>
