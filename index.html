@@ -1,77 +1,50 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 <meta charset="UTF-8">
-<title>Jessie 💖</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Simple Budget Planner</title>
 
 <style>
 body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background: pink;
+  font-family: Arial;
+  background: #f4f6f9;
+  padding: 20px;
   text-align: center;
-  overflow-x: hidden;
-}
-
-h1 {
-  font-size: 2.4em;
-  margin-top: 25px;
-}
-
-p {
-  font-size: 1.2em;
 }
 
 .container {
-  position: relative;
-  padding-bottom: 150px;
+  max-width: 500px;
+  margin: auto;
+  background: white;
+  padding: 25px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
 }
 
-img {
-  width: 85%;
-  max-width: 320px;
-  border-radius: 25px;
-  margin-top: 20px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-}
-
-.buttons {
-  margin-top: 25px;
-  position: relative;
-  height: 120px;
+input, select, button {
+  width: 100%;
+  padding: 10px;
+  margin: 8px 0;
 }
 
 button {
-  padding: 15px 28px;
-  font-size: 18px;
+  background: #007bff;
+  color: white;
   border: none;
-  border-radius: 30px;
   cursor: pointer;
 }
 
-#yes {
-  background: #ff3366;
-  color: white;
+button:hover {
+  background: #0056b3;
 }
 
-#no {
-  background: white;
-  position: absolute;
-  left: 55%;
-  top: 50%;
-}
-
-.heart {
-  position: fixed;
-  font-size: 20px;
-  color: red;
-  animation: float 4s linear infinite;
-}
-
-@keyframes float {
-  0% { transform: translateY(0); opacity: 1; }
-  100% { transform: translateY(-600px); opacity: 0; }
+.expense-item {
+  display: flex;
+  justify-content: space-between;
+  background: #f1f1f1;
+  padding: 8px;
+  margin-top: 5px;
+  border-radius: 5px;
 }
 </style>
 </head>
@@ -79,55 +52,79 @@ button {
 <body>
 
 <div class="container">
-  <h1>Jessie 💕</h1>
-  <p>Will you be my Valentine? 💘</p>
 
-  <!-- 📸 Picture -->
-  <img src="./us.jpg" alt="Us together ❤️">
+<h2>Weekly Budget Planner</h2>
 
-  <!-- ❤️ Buttons -->
-  <div class="buttons">
-    <button id="yes" onclick="yesClick()">YES ❤️</button>
-    <button id="no" onmouseover="moveNo()">NO 😅</button>
-  </div>
+<input type="number" id="income" placeholder="Enter Weekly Income">
+
+<select id="category">
+  <option>Food</option>
+  <option>Transportation</option>
+  <option>Fun</option>
+  <option>Bills</option>
+  <option>Savings</option>
+  <option>Other</option>
+</select>
+
+<input type="number" id="amount" placeholder="Enter Expense Amount">
+
+<button onclick="addExpense()">Add Expense</button>
+
+<h3>Total Expenses: <span id="total">0</span></h3>
+<h3>Remaining Money: <span id="remaining">0</span></h3>
+
+<div id="expensesList"></div>
+
+<button onclick="resetBudget()">Reset Budget</button>
+
 </div>
 
-<!-- 🎵 Music -->
-<audio id="music" loop>
-  <source src="./music.mp3" type="audio/mpeg">
-</audio>
-
 <script>
-function yesClick() {
-  document.getElementById("music").play();
+let expenses = [];
 
-  document.body.innerHTML = `
-    <h1>Yaaay Jessie!!! 🥰💖</h1>
-    <p><strong>Good choice 😘</strong></p>
-    <p>Thank you for being my Valentine 💕</p>
-    <p>— Teddy Bear 🧸</p>
-    <p>📸 Screenshot this and send it to me 😘</p>
-  `;
+function addExpense() {
+  let income = parseFloat(document.getElementById("income").value);
+  let amount = parseFloat(document.getElementById("amount").value);
+  let category = document.getElementById("category").value;
+
+  if (isNaN(income) || isNaN(amount)) {
+    alert("Please enter valid numbers.");
+    return;
+  }
+
+  expenses.push({ category, amount });
+  displayExpenses();
+  document.getElementById("amount").value = "";
 }
 
-function moveNo() {
-  const noBtn = document.getElementById("no");
-  const x = Math.random() * (window.innerWidth - 120);
-  const y = Math.random() * (window.innerHeight - 120);
-  noBtn.style.left = x + "px";
-  noBtn.style.top = y + "px";
+function displayExpenses() {
+  let total = 0;
+  let expensesList = document.getElementById("expensesList");
+  expensesList.innerHTML = "";
+
+  expenses.forEach(exp => {
+    total += exp.amount;
+
+    let div = document.createElement("div");
+    div.className = "expense-item";
+    div.innerHTML = `
+      <span>${exp.category}</span>
+      <span>${exp.amount}</span>
+    `;
+    expensesList.appendChild(div);
+  });
+
+  document.getElementById("total").innerText = total;
+  document.getElementById("remaining").innerText =
+    document.getElementById("income").value - total;
 }
 
-// 💕 Floating hearts
-setInterval(() => {
-  const heart = document.createElement("div");
-  heart.className = "heart";
-  heart.innerHTML = "❤️";
-  heart.style.left = Math.random() * window.innerWidth + "px";
-  heart.style.top = "100%";
-  document.body.appendChild(heart);
-  setTimeout(() => heart.remove(), 4000);
-}, 350);
+function resetBudget() {
+  expenses = [];
+  document.getElementById("expensesList").innerHTML = "";
+  document.getElementById("total").innerText = 0;
+  document.getElementById("remaining").innerText = 0;
+}
 </script>
 
 </body>
